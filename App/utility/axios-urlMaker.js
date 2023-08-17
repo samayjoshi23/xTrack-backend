@@ -23,23 +23,21 @@ const GetHeaders = (authToken = null, recordRange = null) => {
   if(authToken != null){
     headers.Authorization = authToken;
   }
-  if(recordRange & recordRange != ''){
+  if(recordRange != null){
       headers['Range']= recordRange;
   }
 
   return headers;
 }
 
-module.exports.GetUrlAndHeaders = (reqParams, operationType, authToken = null) => {
-  let finalQueryString = '';
+module.exports.GetUrlAndHeaders = (range, operationType, authToken = null) => {
   let headers = '';
   let baseUrl = '';
   
-  finalQueryString = reqParams?.queryString != null ? reqParams.queryString : "";
-  headers = GetHeaders(authToken, reqParams.range);
+  headers = GetHeaders(authToken, range);
   baseUrl = UrlSet(operationType);
 
-  return { finalQueryString, headers, baseUrl };
+  return { headers, baseUrl };
 }
 
 

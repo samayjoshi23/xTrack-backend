@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 // Controllers
-const { homeData } = require('../Controllers/transactionController');
+const { GetTransactions, GetCategories } = require('../Controllers/transactionController');
 const wrapAsync = require('../utility/wrapAsync');
 
-router.get('/homeData', wrapAsync(homeData));
+router.get('/getTransactions', wrapAsync(GetTransactions));
+
+router.get('/getCategories', wrapAsync(GetCategories));
 
 
 module.exports = router;
