@@ -7,10 +7,12 @@ const OperationalResult = require('./../Models/OperationResult.js');
 //Get user transactions
 module.exports.GetTransactions = async (req, res) => {
     const operationalResult = new OperationalResult();
-    const range = req.query.range;
-    const reqData = GetUrlAndHeaders(range, BaseUrlTypeEnum.REST_BASE_URL, req.headers.authorization);
+    thisMonthFilterString = req.query.filterString;
+    const reqData = GetUrlAndHeaders(null, BaseUrlTypeEnum.REST_BASE_URL, req.headers.authorization);
+    let tableFields = 'id,title,description,amount,transactionType,mode,dateCreated';
+    let filters = `&isActive=eq.1${thisMonthFilterString}`;
   
-    axios.get(`${reqData.baseUrl}Transactions?select=id,title,description,amount,transactionType,category:Categories(id, name, icon)`, { headers : reqData.headers }).then( response => {
+    axios.get(`${reqData.baseUrl}Transactions?select=${tableFields},category:Categories(id, name, icon)${filters}`, { headers : reqData.headers }).then( response => {
       operationalResult.data = response.data;
       operationalResult.statusCode = response.status;
       operationalResult.statusText = response.statusText;
@@ -22,7 +24,7 @@ module.exports.GetTransactions = async (req, res) => {
       operationalResult.error = e.response.data.error;
       operationalResult.errorMessage = e.response.data.error_description;
       res.status(operationalResult.statusCode).json(operationalResult);
-    });  
+    });
 };
 
 
